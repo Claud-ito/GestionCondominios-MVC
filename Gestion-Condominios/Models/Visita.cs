@@ -2,6 +2,7 @@
 {
     public class Visita
     {
+        public int IdVisita { get; set; }
         public int IdVisitante { get; set; }
         public Visitante Visitante { get; set; } = null!;
         public int IdUnidad { get; set; }
