@@ -1,9 +1,15 @@
+using Gestion_Condominios.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<CondominioDbContext>(options =>
+
+    options.UseSqlServer(builder.Configuration.GetConnectionString("GestionCondominio"))
+);
 
 var app = builder.Build();
 
