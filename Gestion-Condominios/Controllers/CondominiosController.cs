@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Gestion_Condominios.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Gestion_Condominios.Data;
 using Gestion_Condominios.Models;
@@ -46,7 +47,8 @@ namespace Gestion_Condominios.Controllers
         // GET: Condominios/Create
         public IActionResult Create()
         {
-            return View();
+            var modelo = new CondominioCreateViewModel();
+            return View(modelo);
         }
 
         // POST: Condominios/Create
@@ -54,15 +56,40 @@ namespace Gestion_Condominios.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdCondominio,Nombre,Direccion,Telefono")] Condominio condominio)
+        public async Task<IActionResult> Create(CondominioCreateViewModel modelo)
         {
-            if (ModelState.IsValid)
+            if (string.IsNullOrWhiteSpace(modelo.Nombre))
             {
-                _context.Add(condominio);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError(
+                    nameof(modelo.Nombre),
+                    "El nombre no puede estar vacío.");
             }
-            return View(condominio);
+
+            if (string.IsNullOrWhiteSpace(modelo.Direccion))
+            {
+                ModelState.AddModelError(
+                    nameof(modelo.Direccion),
+                    "La dirección no puede estar vacía.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(modelo);
+            }
+
+            var condominio = new Condominio
+            {
+                Nombre = modelo.Nombre.Trim(),
+                Direccion = modelo.Direccion.Trim(),
+                Telefono = string.IsNullOrWhiteSpace(modelo.Telefono) ? null : modelo.Telefono.Trim(),  
+            };
+
+            _context.Condominios.Add(condominio);
+            await _context.SaveChangesAsync();
+
+            TempData["Mensaje Exito"] = $"El condominio {modelo.Nombre} se registro correctamente";
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Condominios/Edit/5
