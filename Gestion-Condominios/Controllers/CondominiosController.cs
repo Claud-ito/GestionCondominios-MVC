@@ -1,13 +1,14 @@
+using Gestion_Condominios.Data;
+using Gestion_Condominios.Models;
+using Gestion_Condominios.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Gestion_Condominios.ViewModels;
-using Microsoft.EntityFrameworkCore;
-using Gestion_Condominios.Data;
-using Gestion_Condominios.Models;
 
 namespace Gestion_Condominios.Controllers
 {
@@ -193,14 +194,22 @@ namespace Gestion_Condominios.Controllers
                 return NotFound();
             }
 
-            var condominio = await _context.Condominios
-                .FirstOrDefaultAsync(m => m.IdCondominio == id);
-            if (condominio == null)
+            var modelo = await _context.Condominios
+                .AsNoTracking()
+                .Where(c => c.IdCondominio == id.Value)
+                .Select(c => new CondominioDeleteViewModel {
+                    IdCondominio = c.IdCondominio,
+                    Nombre = c.Nombre,
+                    CantidadUnidades = c.Unidades.Count()
+                })
+                .FirstOrDefaultAsync();
+
+            if (modelo == null)
             {
                 return NotFound();
             }
 
-            return View(condominio);
+            return View(modelo);
         }
 
         // POST: Condominios/Delete/5
@@ -209,12 +218,45 @@ namespace Gestion_Condominios.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var condominio = await _context.Condominios.FindAsync(id);
-            if (condominio != null)
+            if (condominio == null)
             {
-                _context.Condominios.Remove(condominio);
+                return NotFound();
             }
 
-            await _context.SaveChangesAsync();
+            bool tieneUnidades = await _context.Unidades
+                .AnyAsync(u => u.IdCondominio == id);
+
+            if (tieneUnidades)
+            {
+                TempData["Mensaje Error"] =
+                    "No se puede eliminar el condominio porque tiene unidades asociadas.";
+
+                return RedirectToAction(nameof(Delete), new { id });
+            }
+
+
+            try
+            {
+                _context.Condominios.Remove(condominio);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return NotFound();
+            }
+            catch (DbUpdateException ex) when (
+                    ex.GetBaseException() is SqlException sqlEx &&
+                    sqlEx.Number == 547)
+            {
+                TempData["Mensaje Error"] =
+                    "No se pudo eliminar el condominio porque existen registros relacionados.";
+
+                return RedirectToAction(nameof(Delete), new { id });
+            }
+
+            TempData["Mensaje Exito"] =
+                            $"El condominio '{condominio.Nombre}' se eliminó correctamente.";
+
             return RedirectToAction(nameof(Index));
         }
 
