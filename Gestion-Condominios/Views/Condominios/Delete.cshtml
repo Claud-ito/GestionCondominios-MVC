@@ -1,0 +1,65 @@
+@model Gestion_Condominios.ViewModels.CondominioDeleteViewModel
+
+@{
+    ViewData["Title"] = "Eliminar condominio";
+}
+
+<h1 class="mb-4">Eliminar condominio</h1>
+@if (TempData["Mensaje Error"] is string mensajeError)
+{
+    <div class="alert alert-danger" role="alert">
+        @mensajeError
+    </div>
+}
+<div class="card shadow-sm">
+
+    <div class="card-body">
+
+        <h4 class="card-title">
+            @Model.Nombre
+        </h4>
+
+        <hr />
+
+        <p>
+            <strong>Unidades registradas:</strong>
+            @Model.CantidadUnidades
+        </p>
+
+        @if (!Model.PuedeEliminar)
+        {
+            <div class="alert alert-danger" role="alert">
+                <strong>No se puede eliminar este condominio.</strong>
+
+                <p class="mb-0">
+                    Tiene @Model.CantidadUnidades unidades asociadas.
+                    Primero deben gestionarse esas unidades.
+                </p>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning" role="alert">
+                ¿Estás seguro de que deseas eliminar este condominio?
+                Esta acción no se puede deshacer.
+            </div>
+
+            <form asp-action="Delete"
+                  asp-route-id="@Model.IdCondominio"
+                  method="post">
+
+                <button type="submit" class="btn btn-danger">
+                    Confirmar eliminación
+                </button>
+
+            </form>
+        }
+
+        <a asp-action="Index"
+           class="btn btn-outline-secondary">
+            Volver al listado
+        </a>
+
+    </div>
+
+</div>

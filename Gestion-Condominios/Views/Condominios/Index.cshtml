@@ -1,0 +1,67 @@
+@model IEnumerable<Gestion_Condominios.Models.Condominio>
+
+@{
+    ViewData["Title"] = "Gestión de Condominios";
+}
+
+<h1>Gestión de Condominios</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Registrar Condominio</a>
+</p>
+
+@if (TempData["Mensaje Exito"] is string mensaje)
+{
+    <div class="alert alert-success" role="status">
+        @mensaje
+    </div>
+}
+
+
+@if(!Model.Any())
+{
+    <div class="alert alert-info" role="status">
+        No hay condominios registrados.
+        Puedes registrar uno utilizando el botón superior.
+    </div>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Direccion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Telefono)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Direccion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Telefono)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.IdCondominio">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.IdCondominio">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.IdCondominio">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
