@@ -30,11 +30,6 @@ namespace Gestion_Condominios.Data.Configurations
             builder.Property(c => c.Telefono)
                 .IsRequired(false)
                 .HasMaxLength(8);
-
-            builder.HasIndex(c => c.Nombre)
-                .IsUnique();
-            builder.HasIndex(c => c.Direccion)
-                .IsUnique();
         }
     }
 }

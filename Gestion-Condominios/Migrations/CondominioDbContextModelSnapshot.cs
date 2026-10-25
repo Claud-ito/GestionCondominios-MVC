@@ -46,12 +46,6 @@ namespace Gestion_Condominios.Migrations
 
                     b.HasKey("IdCondominio");
 
-                    b.HasIndex("Direccion")
-                        .IsUnique();
-
-                    b.HasIndex("Nombre")
-                        .IsUnique();
-
                     b.ToTable("Condominios", null, t =>
                         {
                             t.HasCheckConstraint("CK_Condominios_Direccion", "LEN(LTRIM(RTRIM([Direccion]))) > 0");
