@@ -100,12 +100,22 @@ namespace Gestion_Condominios.Controllers
                 return NotFound();
             }
 
-            var condominio = await _context.Condominios.FindAsync(id);
+            var condominio = await _context.Condominios
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.IdCondominio == id.Value);
             if (condominio == null)
             {
                 return NotFound();
             }
-            return View(condominio);
+            var modelo = new CondominioEditViewModel
+            {
+                IdCondominio = condominio.IdCondominio,
+                Nombre = condominio.Nombre,
+                Direccion = condominio.Direccion,
+                Telefono = condominio.Telefono
+            };
+
+            return View(modelo);
         }
 
         // POST: Condominios/Edit/5
@@ -113,34 +123,66 @@ namespace Gestion_Condominios.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdCondominio,Nombre,Direccion,Telefono")] Condominio condominio)
+        public async Task<IActionResult> Edit(int id, CondominioEditViewModel modelo)
         {
-            if (id != condominio.IdCondominio)
+            if (id != modelo.IdCondominio)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (string.IsNullOrWhiteSpace(modelo.Nombre))
             {
-                try
-                {
-                    _context.Update(condominio);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CondominioExists(condominio.IdCondominio))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError(
+                    nameof(modelo.Nombre),
+                    "El nombre no puede estar vacío.");
             }
-            return View(condominio);
+
+            if (string.IsNullOrWhiteSpace(modelo.Direccion))
+            {
+                ModelState.AddModelError(
+                    nameof(modelo.Direccion),
+                    "La dirección no puede estar vacía.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(modelo);
+            }
+
+            var condominio = await _context.Condominios.FindAsync(id);
+
+            if (condominio == null)
+            {
+                return NotFound();
+            }
+
+            condominio.Nombre = modelo.Nombre.Trim();
+            condominio.Direccion = modelo.Direccion.Trim();
+            condominio.Telefono =
+                string.IsNullOrWhiteSpace(modelo.Telefono)
+                    ? null
+                    : modelo.Telefono.Trim();
+
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _context.Condominios
+                    .AnyAsync(c => c.IdCondominio == id))
+                {
+                    return NotFound();
+                }
+
+                throw;
+            }
+
+            TempData["Mensaje Exito"] =
+                $"El condominio '{condominio.Nombre}' se actualizó correctamente.";
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Condominios/Delete/5

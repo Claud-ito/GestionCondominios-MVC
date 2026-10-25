@@ -1,4 +1,4 @@
-@model Gestion_Condominios.Models.Condominio
+@model Gestion_Condominios.ViewModels.CondominioEditViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -10,7 +10,10 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit"
+            asp-route-id="@Model.IdCondominio"
+            method="post"
+        >
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdCondominio" />
             <div class="form-group">
