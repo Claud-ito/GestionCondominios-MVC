@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Gestion_Condominios.Models.Visitante>
+
+@{
+    ViewData["Title"] = "Gestión de Visitantes";
+}
+
+<h2>Gestión de Visitantes</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">
+        Registrar visitante
+    </a>
+</p>
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Mensaje"]
+    </div>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Número de CI</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var visitante in Model)
+        {
+            <tr>
+                <td>@visitante.Nombre</td>
+                <td>@visitante.Apellido</td>
+                <td>@visitante.NroCI</td>
+            </tr>
+        }
+    </tbody>
+</table>
