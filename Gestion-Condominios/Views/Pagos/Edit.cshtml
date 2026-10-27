@@ -1,0 +1,5 @@
+@model Gestion_Condominios.ViewModels.PagoEditVM
+@{ ViewData["Title"] = "Editar expensa"; }
+<h1>Editar expensa</h1><p><strong>@Model.Casa</strong> — @Model.Periodo — @Model.Monto.ToString("N2")</p>
+<form method="post"><input asp-for="IdPago" type="hidden" /><div asp-validation-summary="ModelOnly" class="text-danger"></div><div class="mb-3"><label asp-for="Concepto" class="form-label"></label><input asp-for="Concepto" class="form-control" /></div><div class="mb-3"><label asp-for="FechaVencimiento" class="form-label">Vencimiento</label><input asp-for="FechaVencimiento" class="form-control" /></div><button class="btn btn-primary">Guardar</button> <a asp-action="Index" class="btn btn-secondary">Cancelar</a></form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -27,15 +27,6 @@
                     <ul class="navbar-nav flex-grow-1">
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark"
-                               asp-area=""
-                               asp-controller="Home"
-                               asp-action="Index">
-                                Inicio
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
                             <a class="nav-link text-dark @Activo("Home")" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
                         </li>
 
@@ -46,6 +37,9 @@
                                asp-action="Index">
                                 Visitantes
                             </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @Activo("Visitas")" asp-area="" asp-controller="Visitas" asp-action="Index">Visitas</a>
                         </li>
 
                         <li class="nav-item">
@@ -66,14 +60,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark @Activo("ReporteCobranza")" asp-area="" asp-controller="ReporteCobranza" asp-action="Index">Reporte de cobranza</a>
                         </li>
-                        @* Descomentar cada enlace cuando su controlador llegue a main:
-                        <li class="nav-item">
-                            <a class="nav-link text-dark @Activo("Visitantes")" asp-area="" asp-controller="Visitantes" asp-action="Index">Visitantes</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark @Activo("Visitas")" asp-area="" asp-controller="Visitas" asp-action="Index">Visitas</a>
-                        </li>
-                        *@
                     </ul>
                 </div>
             </div>

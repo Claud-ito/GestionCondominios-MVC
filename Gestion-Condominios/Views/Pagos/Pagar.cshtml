@@ -1,0 +1,5 @@
+@model Gestion_Condominios.ViewModels.PagoPagarVM
+@{ ViewData["Title"] = "Registrar pago"; }
+<h1>Registrar pago completo</h1><dl><dt>Unidad</dt><dd>@Model.Casa</dd><dt>Período</dt><dd>@Model.Periodo</dd><dt>Concepto</dt><dd>@Model.Concepto</dd><dt>Monto</dt><dd>@Model.Monto.ToString("N2")</dd></dl>
+<form method="post"><input asp-for="IdPago" type="hidden" /><div asp-validation-summary="ModelOnly" class="text-danger"></div><div class="mb-3"><label asp-for="FechaPago" class="form-label">Fecha de pago</label><input asp-for="FechaPago" class="form-control" /><span asp-validation-for="FechaPago" class="text-danger"></span></div><button class="btn btn-success">Registrar pago completo</button> <a asp-action="Index" class="btn btn-secondary">Cancelar</a></form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

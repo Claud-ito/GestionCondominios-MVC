@@ -12,6 +12,8 @@ builder.Services.AddDbContext<CondominioDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("GestionCondominio"))
 );
 builder.Services.AddScoped<IOcupacionService, OcupacionService>();
+builder.Services.AddScoped<IPagosService, PagosService>();
+builder.Services.AddScoped<IGeneradorExpensasService, PagosService>();
 
 var app = builder.Build();
 

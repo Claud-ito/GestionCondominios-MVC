@@ -1,0 +1,3 @@
+@model IReadOnlyList<Gestion_Condominios.ViewModels.SaldoUnidadVM>
+@{ ViewData["Title"] = "Saldos por unidad"; }
+<h1>Saldos por unidad</h1><table class="table"><thead><tr><th>Condominio</th><th>Unidad</th><th>Facturado</th><th>Cobrado</th><th>Pendiente</th></tr></thead><tbody>@foreach(var s in Model) { <tr><td>@s.Condominio</td><td>@s.Unidad</td><td>@s.TotalFacturado.ToString("N2")</td><td>@s.TotalCobrado.ToString("N2")</td><td>@s.TotalPendiente.ToString("N2")</td></tr> }</tbody></table><a asp-action="Index">Volver</a>

@@ -1,0 +1,16 @@
+@model Gestion_Condominios.ViewModels.PagoIndexVM
+@{ ViewData["Title"] = "Expensas"; }
+<h1>Expensas</h1>
+@if (TempData["Mensaje Exito"] is string ok) { <div class="alert alert-success">@ok</div> }
+@if (TempData["Mensaje Error"] is string error) { <div class="alert alert-danger">@error</div> }
+<p><a asp-action="Create" class="btn btn-primary">Nueva expensa</a> <a asp-action="Generar" class="btn btn-outline-primary">Generar período actual</a> <a asp-action="Saldos" class="btn btn-outline-secondary">Saldos por unidad</a></p>
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-3"><select asp-for="Filtro.IdCondominio" asp-items="Model.Condominios" class="form-select"><option value="">Todos los condominios</option></select></div>
+    <div class="col-md-3"><select asp-for="Filtro.IdUnidad" asp-items="Model.Unidades" class="form-select"><option value="">Todas las unidades</option></select></div>
+    <div class="col-md-2"><input asp-for="Filtro.Anio" class="form-control" placeholder="Año" /></div>
+    <div class="col-md-2"><input asp-for="Filtro.Mes" class="form-control" placeholder="Mes" /></div>
+    <div class="col-md-2"><button class="btn btn-secondary w-100">Filtrar</button></div>
+</form>
+<table class="table table-striped"><thead><tr><th>Unidad</th><th>Período</th><th>Concepto</th><th>Monto</th><th>Vencimiento</th><th>Pago</th><th>Condición</th><th></th></tr></thead><tbody>
+@foreach (var p in Model.Items) { <tr><td>@p.Casa</td><td>@p.Periodo</td><td>@p.Concepto</td><td>@p.Monto.ToString("N2")</td><td>@p.FechaVencimiento.ToString("d")</td><td>@p.FechaPago?.ToString("d")</td><td>@p.Condicion</td><td><a asp-action="Details" asp-route-id="@p.IdPago">Ver</a> @if (p.Estado != "PAGADO") { <a asp-action="Edit" asp-route-id="@p.IdPago">Editar</a> <a asp-action="Pagar" asp-route-id="@p.IdPago">Pagar</a> <a asp-action="Delete" asp-route-id="@p.IdPago">Eliminar</a> }</td></tr> }
+</tbody></table>

@@ -19,7 +19,7 @@ namespace Gestion_Condominios.Controllers
         // GET: Visitas
         // Historial, búsqueda y filtros
         public async Task<IActionResult> Index(
-            string? buscar, string? estado)
+            string? buscar, string? estado, DateTime? fechaDesde, DateTime? fechaHasta)
         {
             var consulta = _context.Visitas
                 .Include(v => v.Visitante)
@@ -51,12 +51,29 @@ namespace Gestion_Condominios.Controllers
                     v.FechaHoraSalida != null);
             }
 
+            if (fechaDesde.HasValue)
+                consulta = consulta.Where(v => v.FechaHoraIngreso >= fechaDesde.Value.Date);
+
+            if (fechaHasta.HasValue)
+            {
+                var hastaExclusiva = fechaHasta.Value.Date.AddDays(1);
+                consulta = consulta.Where(v => v.FechaHoraIngreso < hastaExclusiva);
+            }
+
+            if (fechaDesde.HasValue && fechaHasta.HasValue && fechaDesde.Value.Date > fechaHasta.Value.Date)
+                ModelState.AddModelError(string.Empty, "La fecha desde no puede ser posterior a la fecha hasta.");
+
             ViewBag.Buscar = buscar;
             ViewBag.Estado = estado;
+            ViewBag.FechaDesde = fechaDesde?.ToString("yyyy-MM-dd");
+            ViewBag.FechaHasta = fechaHasta?.ToString("yyyy-MM-dd");
 
             var visitas = await consulta
                 .OrderByDescending(v => v.FechaHoraIngreso)
                 .ToListAsync();
+
+            ViewBag.TotalVisitas = visitas.Count;
+            ViewBag.VisitasAbiertas = visitas.Count(v => v.FechaHoraSalida is null);
 
             return View(visitas);
         }

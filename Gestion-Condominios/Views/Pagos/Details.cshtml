@@ -1,0 +1,3 @@
+@model Gestion_Condominios.ViewModels.PagoDetalleVM
+@{ ViewData["Title"] = "Detalle de expensa"; }
+<h1>Detalle de expensa</h1><dl class="row"><dt class="col-sm-3">Unidad</dt><dd class="col-sm-9">@Model.Casa</dd><dt class="col-sm-3">Período</dt><dd class="col-sm-9">@Model.Periodo</dd><dt class="col-sm-3">Concepto</dt><dd class="col-sm-9">@Model.Concepto</dd><dt class="col-sm-3">Monto</dt><dd class="col-sm-9">@Model.Monto.ToString("N2")</dd><dt class="col-sm-3">Condición</dt><dd class="col-sm-9">@Model.Condicion</dd></dl><a asp-action="Index" class="btn btn-secondary">Volver</a>

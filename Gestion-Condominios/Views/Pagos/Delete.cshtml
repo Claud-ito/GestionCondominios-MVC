@@ -1,0 +1,3 @@
+@model Gestion_Condominios.ViewModels.PagoDetalleVM
+@{ ViewData["Title"] = "Eliminar expensa"; }
+<h1>Eliminar expensa</h1><p>¿Desea eliminar la expensa pendiente <strong>@Model.Concepto</strong> de @Model.Casa?</p><form method="post"><button class="btn btn-danger">Eliminar</button> <a asp-action="Index" class="btn btn-secondary">Cancelar</a></form>

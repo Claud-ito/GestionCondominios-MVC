@@ -18,7 +18,7 @@
       method="get"
       class="row g-3 mb-4">
 
-    <div class="col-md-5">
+    <div class="col-md-4">
         <label class="form-label">Buscar visitante</label>
         <input type="text"
                name="buscar"
@@ -27,7 +27,7 @@
                placeholder="Nombre, apellido o CI" />
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-2">
         <label class="form-label">Estado de visita</label>
         <select name="estado" class="form-select">
             <option value="">Todas las visitas</option>
@@ -42,7 +42,10 @@
         </select>
     </div>
 
-    <div class="col-md-3 d-flex align-items-end gap-2">
+    <div class="col-md-2"><label class="form-label">Desde</label><input type="date" name="fechaDesde" value="@ViewBag.FechaDesde" class="form-control" /></div>
+    <div class="col-md-2"><label class="form-label">Hasta</label><input type="date" name="fechaHasta" value="@ViewBag.FechaHasta" class="form-control" /></div>
+
+    <div class="col-md-2 d-flex align-items-end gap-2">
         <button type="submit" class="btn btn-primary">
             Buscar
         </button>
@@ -52,6 +55,9 @@
         </a>
     </div>
 </form>
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<p class="text-muted">Total de visitas: <strong>@ViewBag.TotalVisitas</strong> · Visitas abiertas: <strong>@ViewBag.VisitasAbiertas</strong></p>
 
 @if (TempData["Mensaje"] != null)
 {
