@@ -1,0 +1,160 @@
+﻿@model IEnumerable<Gestion_Condominios.Models.Visita>
+
+@{
+    ViewData["Title"] = "Control de Visitas";
+}
+
+<h2>Control de Visitas</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">
+        Registrar ingreso
+    </a>
+</p>
+
+<!-- Buscador y filtros -->
+<form asp-controller="Visitas"
+      asp-action="Index"
+      method="get"
+      class="row g-3 mb-4">
+
+    <div class="col-md-5">
+        <label class="form-label">Buscar visitante</label>
+        <input type="text"
+               name="buscar"
+               value="@ViewBag.Buscar"
+               class="form-control"
+               placeholder="Nombre, apellido o CI" />
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label">Estado de visita</label>
+        <select name="estado" class="form-select">
+            <option value="">Todas las visitas</option>
+            <option value="EnCurso"
+                    selected="@(ViewBag.Estado == "EnCurso")">
+                En curso
+            </option>
+            <option value="Finalizada"
+                    selected="@(ViewBag.Estado == "Finalizada")">
+                Finalizada
+            </option>
+        </select>
+    </div>
+
+    <div class="col-md-3 d-flex align-items-end gap-2">
+        <button type="submit" class="btn btn-primary">
+            Buscar
+        </button>
+
+        <a asp-action="Index" class="btn btn-secondary">
+            Limpiar
+        </a>
+    </div>
+</form>
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Mensaje"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Visitante</th>
+            <th>Condominio</th>
+            <th>Casa</th>
+            <th>Fecha y hora de ingreso</th>
+            <th>Fecha y hora de salida</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var visita in Model)
+        {
+            <tr>
+                <td>
+                    @visita.Visitante.Nombre
+                    @visita.Visitante.Apellido
+                </td>
+
+                <td>@visita.Unidad.Condominio.Nombre</td>
+
+                <td>@visita.Unidad.NumeroUnidad</td>
+
+                <td>
+                    @visita.FechaHoraIngreso.ToString("dd/MM/yyyy HH:mm")
+                </td>
+
+                <td>
+                    @if (visita.FechaHoraSalida.HasValue)
+                    {
+                        @visita.FechaHoraSalida.Value.ToString("dd/MM/yyyy HH:mm")
+                    }
+                    else
+                    {
+                        <span class="text-muted">Pendiente</span>
+                    }
+                </td>
+
+                <td>
+                    @if (visita.FechaHoraSalida == null)
+                    {
+                        <span class="badge bg-warning text-dark">
+                            En curso
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">
+                            Finalizada
+                        </span>
+                    }
+                </td>
+
+                <td>
+                    @if (visita.FechaHoraSalida == null)
+                    {
+                        <form asp-controller="Visitas"
+                              asp-action="RegistrarSalida"
+                              asp-route-id="@visita.IdVisita"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <button type="submit"
+                                    class="btn btn-danger btn-sm"
+                                    onclick="return confirm('¿Confirmar la salida de este visitante?');">
+                                Registrar salida
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <span class="text-muted">
+                            Salida registrada
+                        </span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No se encontraron visitas con los filtros seleccionados.
+    </div>
+}
