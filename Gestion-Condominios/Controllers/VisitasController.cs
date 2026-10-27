@@ -80,6 +80,38 @@ namespace Gestion_Condominios.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // POST: Visitas/RegistrarSalida
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegistrarSalida(int id)
+        {
+            var visita = await _context.Visitas
+                .FirstOrDefaultAsync(v => v.IdVisita == id);
+
+            if (visita == null)
+            {
+                return NotFound();
+            }
+
+            if (visita.FechaHoraSalida != null)
+            {
+                TempData["Error"] =
+                    "Esta visita ya tiene una salida registrada.";
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            visita.FechaHoraSalida = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+
+            TempData["Mensaje"] =
+                "Salida de visita registrada correctamente.";
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
         private async Task CargarListas()
         {
             var visitantes = await _context.Visitantes

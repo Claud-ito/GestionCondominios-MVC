@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Gestion_Condominios.Models.Visita>
+﻿
+@model IEnumerable<Gestion_Condominios.Models.Visita>
 
 @{
     ViewData["Title"] = "Control de Visitas";
@@ -19,6 +20,13 @@
     </div>
 }
 
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
 <table class="table table-striped">
     <thead>
         <tr>
@@ -26,9 +34,12 @@
             <th>Condominio</th>
             <th>Casa</th>
             <th>Fecha y hora de ingreso</th>
+            <th>Fecha y hora de salida</th>
             <th>Estado</th>
+            <th>Acciones</th>
         </tr>
     </thead>
+
     <tbody>
         @foreach (var visita in Model)
         {
@@ -37,11 +48,26 @@
                     @visita.Visitante.Nombre
                     @visita.Visitante.Apellido
                 </td>
+
                 <td>@visita.Unidad.Condominio.Nombre</td>
+
                 <td>@visita.Unidad.NumeroUnidad</td>
+
                 <td>
                     @visita.FechaHoraIngreso.ToString("dd/MM/yyyy HH:mm")
                 </td>
+
+                <td>
+                    @if (visita.FechaHoraSalida.HasValue)
+                    {
+                        @visita.FechaHoraSalida.Value.ToString("dd/MM/yyyy HH:mm")
+                    }
+                    else
+                    {
+                        <span class="text-muted">Pendiente</span>
+                    }
+                </td>
+
                 <td>
                     @if (visita.FechaHoraSalida == null)
                     {
@@ -53,6 +79,31 @@
                     {
                         <span class="badge bg-success">
                             Finalizada
+                        </span>
+                    }
+                </td>
+
+                <td>
+                    @if (visita.FechaHoraSalida == null)
+                    {
+                        <form asp-controller="Visitas"
+                              asp-action="RegistrarSalida"
+                              asp-route-id="@visita.IdVisita"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <button type="submit"
+                                    class="btn btn-danger btn-sm"
+                                    onclick="return confirm('¿Confirmar la salida de este visitante?');">
+                                Registrar salida
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <span class="text-muted">
+                            Salida registrada
                         </span>
                     }
                 </td>
