@@ -1,0 +1,6 @@
+@model IEnumerable<Gestion_Condominios.ViewModels.OcupacionUnidadViewModel>
+@{ ViewData["Title"]="Unidades"; }
+<h1>Unidades</h1><p><a asp-action="Create" class="btn btn-primary">Registrar unidad</a></p>
+@if (TempData["Mensaje Exito"] is string ok) { <div class="alert alert-success">@ok</div> }
+@if (TempData["Mensaje Error"] is string error) { <div class="alert alert-danger">@error</div> }
+@if (!Model.Any()) { <div class="alert alert-info">No hay unidades registradas.</div> } else { <table class="table"><thead><tr><th>Número</th><th>Tipo</th><th>Cuartos</th><th>Superficie</th><th>Tarifa</th><th>Condominio</th><th>Ocupación</th><th></th></tr></thead><tbody>@foreach(var x in Model){<tr><td>@x.Unidad.NumeroUnidad</td><td>@x.Unidad.Tipo</td><td>@x.Unidad.CantidadCuartos</td><td>@x.Unidad.SuperficieM2</td><td>@x.Unidad.PagoMes</td><td>@x.Unidad.Condominio.Nombre</td><td>@(x.EstaOcupada ? "OCUPADA" : "DISPONIBLE")</td><td><a asp-action="Details" asp-route-id="@x.Unidad.IdUnidad">Detalle</a> | <a asp-action="Edit" asp-route-id="@x.Unidad.IdUnidad">Editar</a> | <a asp-controller="Ocupaciones" asp-action="Gestionar" asp-route-id="@x.Unidad.IdUnidad">Ocupación</a></td></tr>}</tbody></table>}

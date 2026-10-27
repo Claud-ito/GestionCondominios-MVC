@@ -1,5 +1,6 @@
 using Gestion_Condominios.Data;
 using Microsoft.EntityFrameworkCore;
+using Gestion_Condominios.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,7 @@ builder.Services.AddDbContext<CondominioDbContext>(options =>
 
     options.UseSqlServer(builder.Configuration.GetConnectionString("GestionCondominio"))
 );
+builder.Services.AddScoped<IOcupacionService, OcupacionService>();
 
 var app = builder.Build();
 
