@@ -17,13 +17,44 @@ namespace Gestion_Condominios.Controllers
         }
 
         // GET: Visitas
-        public async Task<IActionResult> Index()
+        // Historial, búsqueda y filtros
+        public async Task<IActionResult> Index(
+            string? buscar, string? estado)
         {
-            var visitas = await _context.Visitas
+            var consulta = _context.Visitas
                 .Include(v => v.Visitante)
                 .Include(v => v.Unidad)
                 .ThenInclude(u => u.Condominio)
                 .AsNoTracking()
+                .AsQueryable();
+
+            // Buscar por nombre, apellido o CI
+            if (!string.IsNullOrWhiteSpace(buscar))
+            {
+                buscar = buscar.Trim();
+
+                consulta = consulta.Where(v =>
+                    v.Visitante.Nombre.Contains(buscar) ||
+                    v.Visitante.Apellido.Contains(buscar) ||
+                    v.Visitante.NroCI.Contains(buscar));
+            }
+
+            // Filtrar por estado de la visita
+            if (estado == "EnCurso")
+            {
+                consulta = consulta.Where(v =>
+                    v.FechaHoraSalida == null);
+            }
+            else if (estado == "Finalizada")
+            {
+                consulta = consulta.Where(v =>
+                    v.FechaHoraSalida != null);
+            }
+
+            ViewBag.Buscar = buscar;
+            ViewBag.Estado = estado;
+
+            var visitas = await consulta
                 .OrderByDescending(v => v.FechaHoraIngreso)
                 .ToListAsync();
 
@@ -50,12 +81,18 @@ namespace Gestion_Condominios.Controllers
                 .AnyAsync(u => u.IdUnidad == IdUnidad);
 
             if (!visitanteExiste)
-                ModelState.AddModelError("IdVisitante",
+            {
+                ModelState.AddModelError(
+                    "IdVisitante",
                     "Seleccioná un visitante válido.");
+            }
 
             if (!unidadExiste)
-                ModelState.AddModelError("IdUnidad",
+            {
+                ModelState.AddModelError(
+                    "IdUnidad",
                     "Seleccioná una unidad válida.");
+            }
 
             if (!ModelState.IsValid)
             {
@@ -111,7 +148,7 @@ namespace Gestion_Condominios.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
+        // Cargar visitantes y unidades
         private async Task CargarListas()
         {
             var visitantes = await _context.Visitantes
@@ -134,7 +171,9 @@ namespace Gestion_Condominios.Controllers
                 .ToListAsync();
 
             ViewBag.Visitantes = new SelectList(
-                visitantes, "IdVisitante", "NombreCompleto");
+                visitantes,
+                "IdVisitante",
+                "NombreCompleto");
 
             ViewBag.Unidades = new SelectList(
                 unidades.Select(u => new
@@ -143,8 +182,8 @@ namespace Gestion_Condominios.Controllers
                     Descripcion = u.Condominio.Nombre +
                                   " - Casa " + u.NumeroUnidad
                 }),
-                "IdUnidad", "Descripcion");
+                "IdUnidad",
+                "Descripcion");
         }
     }
 }
-

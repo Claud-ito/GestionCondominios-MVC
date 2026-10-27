@@ -1,5 +1,4 @@
-﻿
-@model IEnumerable<Gestion_Condominios.Models.Visita>
+﻿@model IEnumerable<Gestion_Condominios.Models.Visita>
 
 @{
     ViewData["Title"] = "Control de Visitas";
@@ -12,6 +11,47 @@
         Registrar ingreso
     </a>
 </p>
+
+<!-- Buscador y filtros -->
+<form asp-controller="Visitas"
+      asp-action="Index"
+      method="get"
+      class="row g-3 mb-4">
+
+    <div class="col-md-5">
+        <label class="form-label">Buscar visitante</label>
+        <input type="text"
+               name="buscar"
+               value="@ViewBag.Buscar"
+               class="form-control"
+               placeholder="Nombre, apellido o CI" />
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label">Estado de visita</label>
+        <select name="estado" class="form-select">
+            <option value="">Todas las visitas</option>
+            <option value="EnCurso"
+                    selected="@(ViewBag.Estado == "EnCurso")">
+                En curso
+            </option>
+            <option value="Finalizada"
+                    selected="@(ViewBag.Estado == "Finalizada")">
+                Finalizada
+            </option>
+        </select>
+    </div>
+
+    <div class="col-md-3 d-flex align-items-end gap-2">
+        <button type="submit" class="btn btn-primary">
+            Buscar
+        </button>
+
+        <a asp-action="Index" class="btn btn-secondary">
+            Limpiar
+        </a>
+    </div>
+</form>
 
 @if (TempData["Mensaje"] != null)
 {
@@ -111,3 +151,10 @@
         }
     </tbody>
 </table>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No se encontraron visitas con los filtros seleccionados.
+    </div>
+}
