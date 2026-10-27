@@ -1,0 +1,3 @@
+@model Gestion_Condominios.ViewModels.UnidadFormViewModel
+@{ ViewData["Title"]="Registrar unidad"; } <h1>Registrar unidad</h1>
+<form asp-action="Create"><partial name="_Form" model="Model"/><button class="btn btn-primary">Guardar</button> <a asp-action="Index" class="btn btn-secondary">Cancelar</a></form><partial name="_ValidationScriptsPartial" />
