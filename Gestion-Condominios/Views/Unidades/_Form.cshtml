@@ -1,0 +1,8 @@
+@model Gestion_Condominios.ViewModels.UnidadFormViewModel
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="mb-3"><label asp-for="IdCondominio" class="form-label"></label><select asp-for="IdCondominio" asp-items="ViewBag.Condominios" class="form-select"><option value="">-- Seleccione --</option></select><span asp-validation-for="IdCondominio" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="NumeroUnidad" class="form-label"></label><input asp-for="NumeroUnidad" class="form-control"/><span asp-validation-for="NumeroUnidad" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="Tipo" class="form-label"></label><input asp-for="Tipo" class="form-control"/><span asp-validation-for="Tipo" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="CantidadCuartos" class="form-label"></label><input asp-for="CantidadCuartos" class="form-control"/><span asp-validation-for="CantidadCuartos" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="SuperficieM2" class="form-label"></label><input asp-for="SuperficieM2" class="form-control"/><span asp-validation-for="SuperficieM2" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="PagoMes" class="form-label"></label><input asp-for="PagoMes" class="form-control"/><span asp-validation-for="PagoMes" class="text-danger"></span></div>

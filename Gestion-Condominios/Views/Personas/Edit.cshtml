@@ -1,0 +1,2 @@
+@model Gestion_Condominios.ViewModels.PersonaFormViewModel
+@{ViewData["Title"]="Editar persona";}<h1>Editar persona</h1><form asp-action="Edit"><input type="hidden" asp-for="IdPersona"/><partial name="_Form" model="Model"/><button class="btn btn-primary">Guardar cambios</button> <a asp-action="Index" class="btn btn-secondary">Cancelar</a></form><partial name="_ValidationScriptsPartial" />
