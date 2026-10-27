@@ -1,0 +1,58 @@
+@model Gestion_Condominios.Models.Condominio
+
+@{
+    ViewData["Title"] = "Detalles del Condominio";
+}
+
+<h1>Detalles del Condominio</h1>
+
+<div class="card shadow-sm">
+
+    <div class="card-body">
+
+        <h4 class="card-title mb-4">
+            @Model.Nombre
+        </h4>
+
+        <hr />
+
+        <dl class="row">
+
+            <dt class="col-sm-3">
+                Dirección
+            </dt>
+
+            <dd class="col-sm-9">
+                @Model.Direccion
+            </dd>
+
+            <dt class="col-sm-3">
+                Teléfono
+            </dt>
+
+            <dd class="col-sm-9">
+                @(string.IsNullOrWhiteSpace(Model.Telefono)
+                    ? "No registrado"
+                    : Model.Telefono)
+            </dd>
+
+        </dl>
+
+    </div>
+
+</div>
+
+<div class="mt-4">
+
+    <a asp-action="Edit"
+       asp-route-id="@Model.IdCondominio"
+       class="btn btn-primary">
+        Editar
+    </a>
+
+    <a asp-action="Index"
+       class="btn btn-outline-secondary">
+        Volver al listado
+    </a>
+
+</div>

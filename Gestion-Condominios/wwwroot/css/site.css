@@ -29,3 +29,58 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/* ===== Estilos compartidos del sistema ===== */
+:root {
+  --cond-primary: #1b6ec2;
+  --cond-border: #e5e5e5;
+}
+
+/* Encabezado de página: título a la izquierda, acciones a la derecha */
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  margin: 1rem 0 1.25rem;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+/* Contenedor tipo tarjeta para formularios y tablas */
+.panel {
+  background: #fff;
+  border: 1px solid var(--cond-border);
+  border-radius: .5rem;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 .125rem .5rem rgba(0, 0, 0, .04);
+}
+
+/* Tarjetas de métricas del panel de inicio */
+.metric-card {
+  height: 100%;
+  border-left: 4px solid var(--cond-primary);
+}
+
+.metric-card .metric-value {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.metric-card .metric-label {
+  color: var(--bs-secondary-color);
+  font-size: .9rem;
+}
+
+/* Pie de página fijo al final de la ventana */
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  line-height: 60px;
+}

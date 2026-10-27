@@ -1,34 +1,25 @@
-﻿
+﻿@{
+    var controlador = ViewContext.RouteData.Values["controller"]?.ToString();
+    string Activo(string nombre) => controlador == nombre ? "fw-semibold" : "";
+}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Gestion_Condominios</title>
+    <title>@ViewData["Title"] - Gestión de Condominios</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Gestion_Condominios.styles.css" asp-append-version="true" />
 </head>
-<body>
+<body >
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-
-                <a class="navbar-brand"
-                   asp-area=""
-                   asp-controller="Home"
-                   asp-action="Index">
-                    Gestión de Condominios
-                </a>
-
-                <button class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Gestión de Condominios</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -45,12 +36,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark"
-                               asp-area=""
-                               asp-controller="Home"
-                               asp-action="Privacy">
-                                Privacidad
-                            </a>
+                            <a class="nav-link text-dark @Activo("Home")" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
                         </li>
 
                         <li class="nav-item">
@@ -63,14 +49,31 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark"
-                               asp-area=""
-                               asp-controller="Visitas"
-                               asp-action="Index">
-                                Control de Visitas
-                            </a>
+                            <a class="nav-link text-dark @Activo("Condominios")" asp-area="" asp-controller="Condominios" asp-action="Index">Condominios</a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @Activo("Unidades")" asp-area="" asp-controller="Unidades" asp-action="Index">Unidades</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @Activo("Personas")" asp-area="" asp-controller="Personas" asp-action="Index">Personas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @Activo("Ocupaciones")" asp-area="" asp-controller="Ocupaciones" asp-action="Index">Ocupaciones</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @Activo("Pagos")" asp-area="" asp-controller="Pagos" asp-action="Index">Expensas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @Activo("ReporteCobranza")" asp-area="" asp-controller="ReporteCobranza" asp-action="Index">Reporte de cobranza</a>
+                        </li>
+                        @* Descomentar cada enlace cuando su controlador llegue a main:
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @Activo("Visitantes")" asp-area="" asp-controller="Visitantes" asp-action="Index">Visitantes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @Activo("Visitas")" asp-area="" asp-controller="Visitas" asp-action="Index">Visitas</a>
+                        </li>
+                        *@
                     </ul>
                 </div>
             </div>
@@ -85,12 +88,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2026 - Gestion_Condominios -
-            <a asp-area=""
-               asp-controller="Home"
-               asp-action="Privacy">
-                Privacidad
-            </a>
+            &copy; 2026 - Gestión de Condominios
         </div>
     </footer>
 

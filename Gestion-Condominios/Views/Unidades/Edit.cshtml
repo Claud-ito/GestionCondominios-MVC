@@ -1,0 +1,2 @@
+@model Gestion_Condominios.ViewModels.UnidadFormViewModel
+@{ ViewData["Title"]="Editar unidad"; } <h1>Editar unidad</h1><form asp-action="Edit"><input type="hidden" asp-for="IdUnidad"/><partial name="_Form" model="Model"/><button class="btn btn-primary">Guardar cambios</button> <a asp-action="Index" class="btn btn-secondary">Cancelar</a></form><partial name="_ValidationScriptsPartial" />
