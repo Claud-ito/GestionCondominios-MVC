@@ -17,6 +17,22 @@ builder.Services.AddScoped<IGeneradorExpensasService, PagosService>();
 
 var app = builder.Build();
 
+// Carga explícita de datos de prueba; no se ejecuta al iniciar normalmente.
+if (app.Configuration.GetValue<bool>("SeedDemo"))
+{
+    if (!app.Environment.IsDevelopment())
+        throw new InvalidOperationException(
+            "La carga DEMO solo está permitida en Development.");
+
+    await using var scope = app.Services.CreateAsyncScope();
+    var db = scope.ServiceProvider.GetRequiredService<CondominioDbContext>();
+
+    await db.Database.MigrateAsync();
+    await BogusSeeder.CargarAsync(db);
+    return;
+}
+
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
